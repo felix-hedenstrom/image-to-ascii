@@ -19,6 +19,5 @@ object ImageSpec extends ZIOSpecDefault {
         image.scaleDimensionToFit(2) == Image(Vector(Image.ImageRow(Vector(GrayscalePixel(127), GrayscalePixel(255)))))
       )
     }
-
   )
 }

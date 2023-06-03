@@ -1,6 +1,5 @@
 package nu.fxh.imagetoascii
 
-
 import nu.fxh.imagetoascii.Pixel.{AsciiPixel, ColoredPixel, GrayscalePixel}
 import zio.test._
 import zio.{Scope, ZIO}
@@ -16,11 +15,8 @@ object PixelSpec extends ZIOSpecDefault {
         )
       ),
       test("convert any grayscale")(
-        check(Gen.int.map(GrayscalePixel.apply)) {
-          pixel =>
-            ZIO.attempt(AsciiPixel.fromGrayscale(pixel)).either.map(result =>
-              assertTrue(result.isRight)
-            )
+        check(Gen.int.map(GrayscalePixel.apply)) { pixel =>
+          ZIO.attempt(AsciiPixel.fromGrayscale(pixel)).either.map(result => assertTrue(result.isRight))
         }
       )
     ),

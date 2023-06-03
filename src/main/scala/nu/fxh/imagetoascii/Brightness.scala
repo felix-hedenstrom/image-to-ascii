@@ -10,5 +10,3 @@ object Brightness {
   def apply[A](implicit brightness: Brightness[A]): Brightness[A] = brightness
 
 }
-
-

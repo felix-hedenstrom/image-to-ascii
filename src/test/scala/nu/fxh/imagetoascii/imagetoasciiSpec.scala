@@ -1,6 +1,5 @@
 package nu.fxh.imagetoascii
 
-
 import nu.fxh.coloredToAscii
 import nu.fxh.imagetoascii.Pixel.ColoredPixel
 import zio.test.{Spec, TestEnvironment, ZIOSpecDefault, assertTrue}
@@ -12,9 +11,7 @@ import javax.imageio.ImageIO
 object imagetoasciiSpec extends ZIOSpecDefault {
   override def spec: Spec[TestEnvironment with Scope, Any] = suite("imagetoascii")(
     test("convert the turtle image to ascii")(
-
       readImage("turtle.png").map { image =>
-
         val size = 150
 
         val ascii = coloredToAscii(image, maxSize = Some(size))
@@ -25,9 +22,8 @@ object imagetoasciiSpec extends ZIOSpecDefault {
       }
     ),
     test("convert the alphabet image to ascii")(
-
       readImage("alphabet.jpg").map { image =>
-        val size = 150
+        val size  = 150
         val ascii = coloredToAscii(image, maxSize = Some(size))
         println(ascii)
 
@@ -36,11 +32,10 @@ object imagetoasciiSpec extends ZIOSpecDefault {
     )
   )
 
-
   def readImage(path: String): ZIO[Any, Throwable, Image[ColoredPixel]] = for {
     file <- ZIO.attempt {
-      new File("src/test/resources/" + path)
-    }
+              new File("src/test/resources/" + path)
+            }
     bufferedImage <- ZIO.attempt(ImageIO.read(file))
   } yield Image.fromBufferedImage(bufferedImage)
 }
