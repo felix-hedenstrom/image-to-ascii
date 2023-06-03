@@ -3,7 +3,13 @@ package nu
 import nu.fxh.imagetoascii.Image
 import nu.fxh.imagetoascii.Pixel.{AsciiPixel, ColoredPixel, GrayscalePixel}
 
+import java.awt.image.BufferedImage
+
 package object fxh {
+  def bufferedImageToAscii(bufferedImage: BufferedImage): String = coloredToAscii(
+    Image.fromBufferedImage(bufferedImage)
+  )
+
   def coloredToAscii(image: Image[ColoredPixel], maxSize: Option[Int] = None): String =
     grayscaleToAscii(image.mapPixels(GrayscalePixel.fromColored), maxSize = maxSize)
 
