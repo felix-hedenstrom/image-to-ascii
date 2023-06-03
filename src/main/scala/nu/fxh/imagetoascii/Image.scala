@@ -34,13 +34,13 @@ case class Image[P <: Pixel](rows: Vector[ImageRow[P]]) {
         .toVector
     )
   }
+
+  def mapPixels[B <: Pixel](f: P => B): Image[B] =
+    Image(rows.map(row => ImageRow(row.pixels.map(f))))
 }
 
 object Image {
   case class ImageRow[P <: Pixel](pixels: Vector[P])
-
-  def updatePixels[A <: Pixel, B <: Pixel](image: Image[A], f: A => B): Image[B] =
-    Image(image.rows.map(row => ImageRow(row.pixels.map(f))))
 
   def fromBufferedImage(bufferedImage: BufferedImage): Image[ColoredPixel] =
     Image(

@@ -11,7 +11,7 @@ object PixelSpec extends ZIOSpecDefault {
     suite("AsciiPixel")(
       test("convert from grayscale")(
         assertTrue(
-          AsciiPixel.fromGrayscale(GrayscalePixel(255)).value == ' '
+          AsciiPixel.fromGrayscale(GrayscalePixel(255)).value == '$'
         )
       ),
       test("convert any grayscale")(
