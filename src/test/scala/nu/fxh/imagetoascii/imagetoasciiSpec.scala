@@ -23,7 +23,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
     ),
     test("convert the alphabet image to ascii")(
       readImage("alphabet.jpg").map { image =>
-        val size  = 150
+        val size  = 120
         val ascii = coloredToAscii(image, maxSize = Some(size))
         println(ascii)
 

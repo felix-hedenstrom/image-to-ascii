@@ -36,7 +36,6 @@ object Pixel {
 
   object AsciiPixel {
     def fromGrayscale(pixel: GrayscalePixel): AsciiPixel = {
-      // TODO use a refined type to ensure that pixel values cannot be more than 255 or less than 0
       val index = ((pixel.value.min(255).max(0) / 255.0) * (sortedChars.size - 1)).toInt
 
       AsciiPixel(sortedChars(index))

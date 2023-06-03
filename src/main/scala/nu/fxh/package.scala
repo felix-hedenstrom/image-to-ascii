@@ -14,11 +14,18 @@ package object fxh {
     grayscaleToAscii(image.mapPixels(GrayscalePixel.fromColored), maxSize = maxSize)
 
   def grayscaleToAscii(image: Image[GrayscalePixel], maxSize: Option[Int] = None): String = {
-    val scaledImage = maxSize match {
-      case Some(value) => image.scaleDimensionToFit(value)
-      case None        => image
+    val ratio = maxSize match {
+      case Some(value) =>
+        value.toDouble / (image.width max image.height)
+      case None => 1
     }
 
-    scaledImage.mapPixels(AsciiPixel.fromGrayscale).rows.map(_.pixels.map(_.value).mkString).mkString("\n")
+    image
+      // Always scale height because monospace characters are higher than they are wide
+      .scale(scaleWidth = ratio, scaleHeight = ratio * 0.45)
+      .mapPixels(AsciiPixel.fromGrayscale)
+      .rows
+      .map(_.pixels.map(_.value).mkString)
+      .mkString("\n")
   }
 }

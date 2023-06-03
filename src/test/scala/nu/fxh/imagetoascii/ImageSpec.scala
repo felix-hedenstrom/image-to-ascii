@@ -16,7 +16,9 @@ object ImageSpec extends ZIOSpecDefault {
         )
 
       assertTrue(
-        image.scaleDimensionToFit(2) == Image(Vector(Image.ImageRow(Vector(GrayscalePixel(127), GrayscalePixel(255)))))
+        image.scale(scaleWidth = 0.5, scaleHeight = 0.5) == Image(
+          Vector(Image.ImageRow(Vector(GrayscalePixel(127), GrayscalePixel(255))))
+        )
       )
     }
   )
