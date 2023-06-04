@@ -13,14 +13,7 @@ object ColoredPixelSpec extends ZIOSpecDefault {
         assertTrue(
           ColoredPixel.fromRgbInt(JavaColor.blue.getRGB) == ColoredPixel(0, 0, 255)
         )
-      ),
-      test("convert and keep colors") {
-        val pixel = ColoredPixel.fromRgbInt(JavaColor.blue.getRGB)
-
-        println(pixel.toAscii(withColor = true))
-
-        assertTrue(pixel.closestAnsiColor == Color.Black)
-      }
+      )
     )
   )
 }

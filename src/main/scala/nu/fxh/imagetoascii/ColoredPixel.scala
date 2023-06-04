@@ -7,15 +7,13 @@ import nu.fxh.imagetoascii.controlcodes.{Color, Control}
 case class ColoredPixel(red: Int, green: Int, blue: Int) {
   def brightness: Int = ((red + green + blue) / 3) min 255 max 0
 
-  def closestAnsiColor: Color = Color.Black
-
   def toAscii(withColor: Boolean): String = {
 
     val char = asciiFromBrightness(brightness)
 
     if (withColor) {
 
-      s"${closestAnsiColor.foreground}$char${Control.Reset.value}"
+      s"${Color.closestColorForPixel(this).foreground}$char${Control.Reset.value}"
     } else
       char.toString
 

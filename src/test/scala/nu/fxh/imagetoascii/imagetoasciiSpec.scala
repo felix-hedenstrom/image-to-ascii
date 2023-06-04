@@ -17,7 +17,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
 
         println(ascii)
 
-        assertTrue(ascii.length == size || ascii.split("\n").head.length == size)
+        assertTrue((ascii.length max ascii.split("\n").head.length) == size)
       }
     ),
     test("convert the alphabet image to ascii")(
@@ -26,7 +26,16 @@ object imagetoasciiSpec extends ZIOSpecDefault {
         val ascii = imageToAscii(image, maxSize = Some(size))
         println(ascii)
 
-        assertTrue(ascii.length == size || ascii.split("\n").head.length == size)
+        assertTrue((ascii.length max ascii.split("\n").head.length) == size)
+      }
+    ),
+    test("convert the xp image including color")(
+      readImage("xp.jpg").map { image =>
+        val size = 120
+        val ascii = imageToAscii(image, maxSize = Some(size), useColor = true)
+        println(ascii)
+
+        assertTrue((ascii.length max ascii.split("\n").head.length) == size)
       }
     ),
     suite("asciiFromBrightness")(

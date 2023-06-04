@@ -5,11 +5,14 @@ import nu.fxh.imagetoascii.Image
 import java.awt.image.BufferedImage
 
 package object fxh {
-  def bufferedImageToAscii(bufferedImage: BufferedImage): String = imageToAscii(
-    Image.fromBufferedImage(bufferedImage)
-  )
+  def bufferedImageToAscii(bufferedImage: BufferedImage, maxSize: Option[Int], useColor: Boolean = false): String =
+    imageToAscii(
+      Image.fromBufferedImage(bufferedImage),
+      maxSize,
+      useColor
+    )
 
-  def imageToAscii(image: Image, maxSize: Option[Int] = None): String = {
+  def imageToAscii(image: Image, maxSize: Option[Int] = None, useColor: Boolean = false): String = {
     val ratio = maxSize match {
       case Some(value) =>
         value.toDouble / (image.width max image.height)
@@ -20,7 +23,7 @@ package object fxh {
       // Always scale height because monospace characters are higher than they are wide
       .scale(scaleWidth = ratio, scaleHeight = ratio * 0.45)
       .rows
-      .map(_.pixels.map(_.toAscii(withColor = false)).mkString)
+      .map(_.pixels.map(_.toAscii(withColor = useColor)).mkString)
       .mkString("\n")
   }
 
