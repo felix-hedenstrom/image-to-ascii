@@ -1,19 +1,15 @@
 package nu
 
 import nu.fxh.imagetoascii.Image
-import nu.fxh.imagetoascii.Pixel.{AsciiPixel, ColoredPixel, GrayscalePixel}
 
 import java.awt.image.BufferedImage
 
 package object fxh {
-  def bufferedImageToAscii(bufferedImage: BufferedImage): String = coloredToAscii(
+  def bufferedImageToAscii(bufferedImage: BufferedImage): String = imageToAscii(
     Image.fromBufferedImage(bufferedImage)
   )
 
-  def coloredToAscii(image: Image[ColoredPixel], maxSize: Option[Int] = None): String =
-    grayscaleToAscii(image.mapPixels(GrayscalePixel.fromColored), maxSize = maxSize)
-
-  def grayscaleToAscii(image: Image[GrayscalePixel], maxSize: Option[Int] = None): String = {
+  def imageToAscii(image: Image, maxSize: Option[Int] = None): String = {
     val ratio = maxSize match {
       case Some(value) =>
         value.toDouble / (image.width max image.height)
@@ -23,9 +19,16 @@ package object fxh {
     image
       // Always scale height because monospace characters are higher than they are wide
       .scale(scaleWidth = ratio, scaleHeight = ratio * 0.45)
-      .mapPixels(AsciiPixel.fromGrayscale)
       .rows
-      .map(_.pixels.map(_.value).mkString)
+      .map(_.pixels.map(_.toAscii(withColor = false)).mkString)
       .mkString("\n")
   }
+
+  def asciiFromBrightness(brightness: Int): Char = {
+    val index = ((brightness / 255.0) * (brightnessSortedAsciiChars.size - 1)).toInt
+    brightnessSortedAsciiChars.lift(index).getOrElse('@')
+  }
+
+  val brightnessSortedAsciiChars =
+    """$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.""".reverse.toCharArray
 }

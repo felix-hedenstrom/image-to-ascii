@@ -1,22 +1,24 @@
 package nu.fxh.imagetoascii
 
 import nu.fxh.imagetoascii.Image.ImageRow
-import nu.fxh.imagetoascii.Pixel.ColoredPixel
 import cats.Monoid
 
 import java.awt.image.BufferedImage
 
-case class Image[P <: Pixel](rows: Vector[ImageRow[P]]) {
+case class Image(rows: Vector[ImageRow]) {
   def width: Int = rows.headOption.map(_.pixels.size).getOrElse(0)
 
   def height: Int = rows.size
 
-  def get(x: Int, y: Int): Option[P] = for {
+  def get(x: Int, y: Int): Option[ColoredPixel] = for {
     row   <- rows.lift(y)
     pixel <- row.pixels.lift(x)
   } yield pixel
 
-  def scale(scaleWidth: Double, scaleHeight: Double)(implicit monoid: Monoid[P], brightness: Brightness[P]): Image[P] =
+  def scale(scaleWidth: Double, scaleHeight: Double)(implicit
+    monoid: Monoid[ColoredPixel],
+    brightness: Brightness[ColoredPixel]
+  ): Image =
     Image(
       (0 until (scaleHeight * height).ceil.toInt)
         .map(y =>
@@ -28,26 +30,26 @@ case class Image[P <: Pixel](rows: Vector[ImageRow[P]]) {
               )
             )
 
-            Brightness[P].adjustBrightness(Monoid[P].combineAll(subpixels), 1.0 / subpixels.size)
+            Brightness[ColoredPixel].adjustBrightness(Monoid[ColoredPixel].combineAll(subpixels), 1.0 / subpixels.size)
           }.toVector)
         )
         .toVector
     )
 
-  def mapPixels[B <: Pixel](f: P => B): Image[B] =
+  def mapPixels(f: ColoredPixel => ColoredPixel): Image =
     Image(rows.map(row => ImageRow(row.pixels.map(f))))
 }
 
 object Image {
-  case class ImageRow[P <: Pixel](pixels: Vector[P])
+  case class ImageRow(pixels: Vector[ColoredPixel])
 
-  def fromBufferedImage(bufferedImage: BufferedImage): Image[ColoredPixel] =
+  def fromBufferedImage(bufferedImage: BufferedImage): Image =
     Image(
       (bufferedImage.getMinY until bufferedImage.getHeight)
         .map(y =>
           ImageRow(
             (bufferedImage.getMinX until bufferedImage.getWidth)
-              .map(x => Pixel.ColoredPixel.fromRgbInt(bufferedImage.getRGB(x, y)))
+              .map(x => ColoredPixel.fromRgbInt(bufferedImage.getRGB(x, y)))
               .toVector
           )
         )

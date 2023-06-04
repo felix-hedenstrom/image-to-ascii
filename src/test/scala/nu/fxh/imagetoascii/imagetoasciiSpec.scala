@@ -1,8 +1,7 @@
 package nu.fxh.imagetoascii
 
-import nu.fxh.coloredToAscii
-import nu.fxh.imagetoascii.Pixel.ColoredPixel
-import zio.test.{Spec, TestEnvironment, ZIOSpecDefault, assertTrue}
+import nu.fxh.{asciiFromBrightness, imageToAscii}
+import zio.test.{Gen, Spec, TestEnvironment, ZIOSpecDefault, assertTrue, check}
 import zio.{Scope, ZIO}
 
 import java.io.File
@@ -14,7 +13,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
       readImage("turtle.png").map { image =>
         val size = 150
 
-        val ascii = coloredToAscii(image, maxSize = Some(size))
+        val ascii = imageToAscii(image, maxSize = Some(size))
 
         println(ascii)
 
@@ -24,15 +23,27 @@ object imagetoasciiSpec extends ZIOSpecDefault {
     test("convert the alphabet image to ascii")(
       readImage("alphabet.jpg").map { image =>
         val size  = 120
-        val ascii = coloredToAscii(image, maxSize = Some(size))
+        val ascii = imageToAscii(image, maxSize = Some(size))
         println(ascii)
 
         assertTrue(ascii.length == size || ascii.split("\n").head.length == size)
       }
+    ),
+    suite("asciiFromBrightness")(
+      test("convert from pixel")(
+        assertTrue(
+          asciiFromBrightness(255) == '$'
+        )
+      ),
+      test("convert any grayscale")(
+        check(Gen.int) { brightness =>
+          ZIO.attempt(asciiFromBrightness(brightness)).either.map(result => assertTrue(result.isRight))
+        }
+      )
     )
   )
 
-  def readImage(path: String): ZIO[Any, Throwable, Image[ColoredPixel]] = for {
+  def readImage(path: String): ZIO[Any, Throwable, Image] = for {
     file <- ZIO.attempt {
               new File("src/test/resources/" + path)
             }
