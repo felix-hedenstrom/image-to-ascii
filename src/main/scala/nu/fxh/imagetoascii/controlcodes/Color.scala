@@ -19,12 +19,12 @@ object Color {
 
   val colors: Set[Color] = Set(Black, Red, Green, Yellow, Blue, Magenta, Cyan, White)
 
-  def closestColorForPixel(pixel: ColoredPixel): Color = colors.minBy { c =>
+  def closestColorsForPixel(pixel: ColoredPixel): List[Color] = colors.toList.sortBy { c =>
     val dr = pixel.red - c.coloredPixel.red
     val dg = pixel.green - c.coloredPixel.green
     val db = pixel.blue - c.coloredPixel.blue
 
-    sqrt((dr * dr + dg * dg + db * db))
+    sqrt(dr * dr + dg * dg + db * db)
   }
 
 }

@@ -13,7 +13,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
       readImage("turtle.png").map { image =>
         val size = 150
 
-        val ascii = imageToAscii(image, maxSize = Some(size))
+        val ascii = imageToAscii(image, maxSize = Some(size), useColor = true)
 
         println(ascii)
 
@@ -31,7 +31,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
     ),
     test("convert the xp image including color")(
       readImage("xp.jpg").map { image =>
-        val size = 120
+        val size  = 120
         val ascii = imageToAscii(image, maxSize = Some(size), useColor = true)
         println(ascii)
 
