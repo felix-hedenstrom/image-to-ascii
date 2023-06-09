@@ -27,4 +27,49 @@ object Color {
     sqrt(dr * dr + dg * dg + db * db)
   }
 
+  def closest(pixel: ColoredPixel): ColorCombination =
+    ColorCombination.allCombinations.minBy { colorCombination =>
+      val c               = colorCombination.asColoredPixel(pixel.luminosity)
+      val dr              = pixel.red - c.red
+      val dg              = pixel.green - c.green
+      val db              = pixel.blue - c.blue
+      val deltaBrightness = pixel.luminosity - c.luminosity
+
+      sqrt(dr * dr + dg * dg + db * db + deltaBrightness * deltaBrightness)
+    }
+
+  case class ColorCombination(background: Color, foreground: Color) {
+    def asColoredPixel(brightness: Double): ColoredPixel = {
+      val backgroundWeight = ColorCombination.backgroundWeight(brightness)
+      val foregroundWeight = ColorCombination.foregroundWeight(brightness)
+      val total            = backgroundWeight + foregroundWeight
+
+      ColoredPixel(
+        ((background.coloredPixel.red * backgroundWeight + foreground.coloredPixel.red * foregroundWeight) / total).toInt,
+        ((background.coloredPixel.green * backgroundWeight + foreground.coloredPixel.green * foregroundWeight) / total).toInt,
+        ((background.coloredPixel.blue * backgroundWeight + foreground.coloredPixel.blue * foregroundWeight) / total).toInt
+      )
+    }
+  }
+
+  object ColorCombination {
+    def backgroundWeight(brightness: Double): Double =
+      1 - foregroundWeight(brightness)
+
+    def foregroundWeight(brightness: Double): Double =
+      // How many percent of the screen does pixel does the foreground take up?
+//      val k = 0.3
+//
+//      val a: Double = 10
+//      val c: Double = -9
+//      val b: Double = -k * c * c / (255 * k * c + 255 * a)
+//
+//      a / (brightness * b + c) - a / c + 0.01
+
+      brightness * 0.2 + 0.1
+
+    final val allCombinations: List[ColorCombination] =
+      colors.toList.flatMap(background => colors.toList.map(foreground => ColorCombination(background, foreground)))
+  }
+
 }

@@ -1,6 +1,5 @@
 package nu.fxh.imagetoascii
 
-import nu.fxh.imagetoascii.controlcodes.Color
 import zio.Scope
 import zio.test._
 
@@ -12,6 +11,11 @@ object ColoredPixelSpec extends ZIOSpecDefault {
       test("convert a java RGB int to a colored pixel")(
         assertTrue(
           ColoredPixel.fromRgbInt(JavaColor.blue.getRGB) == ColoredPixel(0, 0, 255)
+        )
+      ),
+      test("calculate luminosity")(
+        assertTrue(
+          (ColoredPixel(54, 155, 229).luminosity * 1000).round == 555
         )
       )
     )

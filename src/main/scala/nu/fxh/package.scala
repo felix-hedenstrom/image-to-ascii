@@ -27,9 +27,9 @@ package object fxh {
       .mkString("\n")
   }
 
-  def asciiFromBrightness(brightness: Int): Char = {
-    val index = ((brightness / 255.0) * (brightnessSortedAsciiChars.size - 1)).toInt
-    brightnessSortedAsciiChars.lift(index).getOrElse('@')
+  def asciiFromBrightness(brightness: Double): Char = {
+    val index = (brightness * (brightnessSortedAsciiChars.size - 1)).toInt
+    brightnessSortedAsciiChars.lift(index).getOrElse(brightnessSortedAsciiChars.head)
   }
 
   val brightnessSortedAsciiChars =

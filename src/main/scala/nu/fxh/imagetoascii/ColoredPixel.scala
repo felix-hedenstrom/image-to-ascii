@@ -2,19 +2,27 @@ package nu.fxh.imagetoascii
 
 import cats.kernel.Monoid
 import nu.fxh.asciiFromBrightness
+import nu.fxh.imagetoascii.controlcodes.Color.ColorCombination
 import nu.fxh.imagetoascii.controlcodes.{Color, Control}
 
 case class ColoredPixel(red: Int, green: Int, blue: Int) {
-  def brightness: Int = ((red + green + blue) / 3.0).toInt
+  // https://donatbalipapp.medium.com/colours-maths-90346fb5abda
+  def luminosity: Double = {
+    val smallest = List(red, green, blue).min / 255.0
+    val largest  = List(red, green, blue).max / 255.0
+
+    (smallest + largest) / 2.0
+  }
 
   def toAscii(withColor: Boolean): String = {
 
-    val char = asciiFromBrightness(brightness)
+    val char = asciiFromBrightness(luminosity)
 
     if (withColor) {
-      val closest :: secondClosest :: _ = Color.closestColorsForPixel(this)
+      val ColorCombination(background, foreground) = Color.closest(this)
 
-      s"${closest.background}${secondClosest.foreground}$char${Control.Reset.value}"
+      s"${background.background}${foreground.foreground}$char${Control.Reset.value}"
+
     } else
       char.toString
 
