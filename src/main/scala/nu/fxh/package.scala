@@ -33,5 +33,5 @@ package object fxh {
   }
 
   val brightnessSortedAsciiChars =
-    """$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.""".reverse.toCharArray
+    """ `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@""".toCharArray
 }
