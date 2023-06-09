@@ -31,8 +31,15 @@ object Color {
     ColorCombination.allCombinations.minBy { colorCombination =>
       val c = colorCombination.asColoredPixel(pixel.luminosity)
 
-      val hueDiff        = pixel.hue.distance(c.hue) / 360.0
       val luminosityDiff = pixel.luminosity - c.luminosity
+      val saturationDiff = pixel.saturation - c.saturation
+
+      val hueDiff: Double = pixel.hue match {
+        case Some(value) =>
+          c.hue.map(_.distance(value) / 360.0).getOrElse(0.5)
+        case None =>
+          c.hue.fold(0.0)(_ => 0.5)
+      }
 
       Math.sqrt(hueDiff * hueDiff + luminosityDiff * luminosityDiff)
     }

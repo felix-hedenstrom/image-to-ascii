@@ -45,7 +45,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
           ZIO.attempt(
             ImageIO.read(
               new URL(
-                "https://images.unsplash.com/photo-1549740425-5e9ed4d8cd34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXwzOTU0NTB8fGVufDB8fHx8fA%3D%3D&w=1000&q=80"
+                "https://upload.wikimedia.org/wikipedia/commons/2/2a/Duck-293474_white_background.jpg"
               )
             )
           )

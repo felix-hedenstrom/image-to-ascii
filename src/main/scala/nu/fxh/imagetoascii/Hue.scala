@@ -12,7 +12,7 @@ case class Hue(value: Double) {
 }
 
 object Hue {
-  def fromColoredPixel(pixel: ColoredPixel): Hue = {
+  def fromColoredPixel(pixel: ColoredPixel): Option[Hue] = {
     val R = pixel.red / 255.0
     val G = pixel.green / 255.0
     val B = pixel.blue / 255.0
@@ -20,19 +20,26 @@ object Hue {
     val highest = List(R, G, B).max
     val lowest  = List(R, G, B).min
 
-    val degrees = (if (R == highest)
-                     (G - B) / (highest - lowest)
-                   else if (G == highest)
-                     2.0 + (B - R) / (highest - lowest)
-                   else
-                     4.0 + (R - G) / (highest - lowest)) * 60
+    if (highest == lowest)
+      None
+    else {
 
-    Hue(
-      if (degrees < 0)
-        degrees + 360
-      else
-        degrees
-    )
+      val degrees = (if (R == highest)
+                       (G - B) / (highest - lowest)
+                     else if (G == highest)
+                       2.0 + (B - R) / (highest - lowest)
+                     else
+                       4.0 + (R - G) / (highest - lowest)) * 60
+
+      Some(
+        Hue(
+          if (degrees < 0)
+            degrees + 360
+          else
+            degrees
+        )
+      )
+    }
   }
 
 }

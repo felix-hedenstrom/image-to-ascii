@@ -7,14 +7,15 @@ import nu.fxh.imagetoascii.controlcodes.{Color, Control}
 
 case class ColoredPixel(red: Int, green: Int, blue: Int) {
   // https://donatbalipapp.medium.com/colours-maths-90346fb5abda
-  def luminosity: Double = {
-    val highest = List(red, green, blue).max / 255.0
-    val lowest  = List(red, green, blue).min / 255.0
+  def luminosity: Double =
+    (highestPixel + lowestPixel) / 2.0
 
-    (highest + lowest) / 2.0
-  }
+  def highestPixel: Double = List(red, green, blue).max / 255.0
+  def lowestPixel: Double  = List(red, green, blue).min / 255.0
 
-  def hue: Hue = Hue.fromColoredPixel(this)
+  def hue: Option[Hue] = Hue.fromColoredPixel(this)
+
+  def saturation: Double = if (luminosity == 1) 0 else { (highestPixel - lowestPixel) / (1 - (2 * luminosity - 1).abs) }
 
   def toAscii(withColor: Boolean): String = {
 
