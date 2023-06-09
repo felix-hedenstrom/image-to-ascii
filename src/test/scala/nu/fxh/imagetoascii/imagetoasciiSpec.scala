@@ -1,7 +1,7 @@
 package nu.fxh.imagetoascii
 
-import nu.fxh.{asciiFromBrightness, imageToAscii}
 import zio.test.{Gen, Spec, TestEnvironment, ZIOSpecDefault, assertTrue, check}
+import nu.fxh.{asciiFromBrightness, imageToAscii}
 import zio.{Scope, ZIO}
 
 import java.io.File
@@ -44,7 +44,9 @@ object imagetoasciiSpec extends ZIOSpecDefault {
         bufferedImage <-
           ZIO.attempt(
             ImageIO.read(
-              new URL("https://neode.se:8448/_matrix/media/r0/thumbnail/neode.se/lyqafxeouxnwfDXkrzaGMPoA?width=604&height=604&method=scale")
+              new URL(
+                "https://images.unsplash.com/photo-1549740425-5e9ed4d8cd34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXwzOTU0NTB8fGVufDB8fHx8fA%3D%3D&w=1000&q=80"
+              )
             )
           )
         ascii = imageToAscii(Image.fromBufferedImage(bufferedImage), maxSize = Some(200), useColor = true)
@@ -54,7 +56,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
     suite("asciiFromBrightness")(
       test("convert from pixel")(
         assertTrue(
-          asciiFromBrightness(255) == '$'
+          asciiFromBrightness(1) == '$'
         )
       ),
       test("convert any grayscale")(

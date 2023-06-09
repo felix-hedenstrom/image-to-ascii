@@ -17,6 +17,11 @@ object ColoredPixelSpec extends ZIOSpecDefault {
         assertTrue(
           (ColoredPixel(54, 155, 229).luminosity * 1000).round == 555
         )
+      ),
+      test("hue")(
+        assertTrue(
+          ColoredPixel(54, 155, 229).hue.value.round == 205L
+        )
       )
     )
   )
