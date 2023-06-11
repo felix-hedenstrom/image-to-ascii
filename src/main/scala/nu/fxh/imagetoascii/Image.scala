@@ -10,7 +10,7 @@ case class Image(rows: Vector[ImageRow]) {
   def height: Int = rows.size
 
   def get(x: Int, y: Int): Option[ColoredPixel] = for {
-    row <- rows.lift(y)
+    row   <- rows.lift(y)
     pixel <- row.pixels.lift(x)
   } yield pixel
 
@@ -26,12 +26,15 @@ case class Image(rows: Vector[ImageRow]) {
               )
             )
 
-            val combinedSubpixels = subpixels.foldLeft(ColoredPixel(0, 0, 0)) {
-              case (a, b) =>
-                ColoredPixel(a.red + b.red, a.green + b.green, a.blue + b.blue)
+            val combinedSubpixels = subpixels.foldLeft(ColoredPixel(0, 0, 0)) { case (a, b) =>
+              ColoredPixel(a.red + b.red, a.green + b.green, a.blue + b.blue)
             }
 
-            ColoredPixel(combinedSubpixels.red / subpixels.size, combinedSubpixels.green / subpixels.size, combinedSubpixels.blue / subpixels.size)
+            ColoredPixel(
+              combinedSubpixels.red / subpixels.size,
+              combinedSubpixels.green / subpixels.size,
+              combinedSubpixels.blue / subpixels.size
+            )
           }.toVector)
         )
         .toVector
