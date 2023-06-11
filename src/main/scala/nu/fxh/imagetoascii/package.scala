@@ -1,10 +1,8 @@
-package nu
-
-import nu.fxh.imagetoascii.Image
+package nu.fxh
 
 import java.awt.image.BufferedImage
 
-package object fxh {
+package object imagetoascii {
   def bufferedImageToAscii(bufferedImage: BufferedImage, maxSize: Option[Int], useColor: Boolean = false): String =
     imageToAscii(
       Image.fromBufferedImage(bufferedImage),

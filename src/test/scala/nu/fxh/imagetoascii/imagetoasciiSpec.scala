@@ -1,7 +1,6 @@
 package nu.fxh.imagetoascii
 
 import zio.test.{Gen, Spec, TestEnvironment, ZIOSpecDefault, assertTrue, check}
-import nu.fxh.{asciiFromBrightness, imageToAscii}
 import zio.{Scope, ZIO}
 
 import java.io.File
