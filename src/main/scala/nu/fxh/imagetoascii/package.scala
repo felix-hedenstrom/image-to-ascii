@@ -1,10 +1,8 @@
-package nu
-
-import nu.fxh.imagetoascii.Image
+package nu.fxh
 
 import java.awt.image.BufferedImage
 
-package object fxh {
+package object imagetoascii {
   def bufferedImageToAscii(bufferedImage: BufferedImage, maxSize: Option[Int], useColor: Boolean = false): String =
     imageToAscii(
       Image.fromBufferedImage(bufferedImage),
@@ -33,5 +31,5 @@ package object fxh {
   }
 
   val brightnessSortedAsciiChars =
-    """ `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@""".toCharArray
+    """EATMYASS""".toCharArray
 }

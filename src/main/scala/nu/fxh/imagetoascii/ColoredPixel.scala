@@ -1,7 +1,6 @@
 package nu.fxh.imagetoascii
 
 import cats.kernel.Monoid
-import nu.fxh.asciiFromBrightness
 import nu.fxh.imagetoascii.controlcodes.Color.ColorCombination
 import nu.fxh.imagetoascii.controlcodes.{Color, Control}
 
