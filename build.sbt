@@ -8,7 +8,6 @@ lazy val root = (project in file("."))
   .settings(
     name := "image-to-ascii",
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % "2.9.0",
       "dev.zio" %% "zio-test" % "2.0.13" % Test,
       "dev.zio" %% "zio-test-sbt" % "2.0.13" % Test
     ),
