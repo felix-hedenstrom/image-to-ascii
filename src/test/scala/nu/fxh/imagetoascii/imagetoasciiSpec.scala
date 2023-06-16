@@ -11,9 +11,9 @@ object imagetoasciiSpec extends ZIOSpecDefault {
   override def spec: Spec[TestEnvironment with Scope, Any] = suite("imagetoascii")(
     test("convert the turtle image to ascii")(
       readImage("turtle.png").map { image =>
-        val size = 150
+        val size = 100
 
-        val ascii = imageToAscii(image, maxSize = Some(size), useColor = true)
+        val ascii = imageToAscii(image, CharTransformationType.MatchByWeightedDistance, maxSize = Some(size))
 
         println(ascii)
 
@@ -32,7 +32,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
     test("convert the xp image including color")(
       readImage("xp.jpg").map { image =>
         val size  = 120
-        val ascii = imageToAscii(image, maxSize = Some(size), useColor = true)
+        val ascii = imageToAscii(image, CharTransformationType.MatchByHue, maxSize = Some(size))
         println(ascii)
 
         assertTrue((ascii.length max ascii.split("\n").head.length) == size)
@@ -44,12 +44,16 @@ object imagetoasciiSpec extends ZIOSpecDefault {
           ZIO.attempt(
             ImageIO.read(
               new URL(
-                "https://upload.wikimedia.org/wikipedia/commons/2/2a/Duck-293474_white_background.jpg"
+                "https://img.freepik.com/free-vector/pride-gradient-1_78370-282.jpgi"
               )
             )
           )
-        ascii = imageToAscii(Image.fromBufferedImage(bufferedImage), maxSize = Some(200), useColor = true)
-        _    <- ZIO.succeed(println(ascii))
+        ascii = imageToAscii(
+                  Image.fromBufferedImage(bufferedImage),
+                  CharTransformationType.MatchByWeightedDistance,
+                  maxSize = Some(100)
+                )
+        _ <- ZIO.succeed(println(ascii))
       } yield assertTrue(ascii.length > 10)
     ),
     suite("asciiFromBrightness")(
