@@ -38,6 +38,12 @@ case class ColoredPixel(red: Int, green: Int, blue: Int) {
         char.toString
     }
   }
+
+  def mapRed(f: Int => Int): ColoredPixel = this.copy(red = f(red))
+
+  def mapGreen(f: Int => Int): ColoredPixel = this.copy(green = f(green))
+
+  def mapBlue(f: Int => Int): ColoredPixel = this.copy(blue = f(blue))
 }
 
 object ColoredPixel {
