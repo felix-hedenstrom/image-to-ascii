@@ -17,7 +17,8 @@ package object imagetoascii {
   def imageToAscii(
     image: Image,
     charTransformationType: CharTransformationType = CharTransformationType.Grayscale,
-    maxSize: Option[Int] = None
+    maxSize: Option[Int] = None,
+    contrast: Option[Int] = None
   ): String = {
     val ratio = maxSize match {
       case Some(value) =>
@@ -28,6 +29,7 @@ package object imagetoascii {
     image
       // Always scale height because monospace characters are higher than they are wide
       .scale(scaleWidth = ratio, scaleHeight = ratio * 0.45)
+      .setContrast(contrast.getOrElse(0))
       .rows
       .map(_.pixels.map(_.toAscii(charTransformationType)).mkString)
       .mkString("\n")

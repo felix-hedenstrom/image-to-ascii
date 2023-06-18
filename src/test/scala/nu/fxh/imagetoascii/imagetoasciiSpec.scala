@@ -13,7 +13,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
       readImage("turtle.png").map { image =>
         val size = 100
 
-        val ascii = imageToAscii(image, CharTransformationType.MatchByWeightedDistance, maxSize = Some(size))
+        val ascii = imageToAscii(image, CharTransformationType.MatchByHue, maxSize = Some(size), contrast = Some(-10))
 
         println(ascii)
 
@@ -32,7 +32,7 @@ object imagetoasciiSpec extends ZIOSpecDefault {
     test("convert the xp image including color")(
       readImage("xp.jpg").map { image =>
         val size  = 120
-        val ascii = imageToAscii(image, CharTransformationType.MatchByHue, maxSize = Some(size))
+        val ascii = imageToAscii(image, CharTransformationType.MatchByHue, maxSize = Some(size), contrast = Some(-28))
         println(ascii)
 
         assertTrue((ascii.length max ascii.split("\n").head.length) == size)
@@ -44,14 +44,15 @@ object imagetoasciiSpec extends ZIOSpecDefault {
           ZIO.attempt(
             ImageIO.read(
               new URL(
-                "https://img.freepik.com/free-vector/pride-gradient-1_78370-282.jpgi"
+                "https://cdn.discordapp.com/attachments/728706968864423966/1119368338729087016/an-artist-drew-spongebob-as-a-real-life-human-and-2-2227-1497636095-0_dblbig.png"
               )
             )
           )
         ascii = imageToAscii(
                   Image.fromBufferedImage(bufferedImage),
                   CharTransformationType.MatchByWeightedDistance,
-                  maxSize = Some(100)
+                  maxSize = Some(200),
+                  contrast = Some(-64)
                 )
         _ <- ZIO.succeed(println(ascii))
       } yield assertTrue(ascii.length > 10)
