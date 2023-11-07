@@ -39,10 +39,28 @@ case class Image(rows: Vector[ImageRow]) {
         )
         .toVector
     )
+
+  def mapPixels(f: ColoredPixel => ColoredPixel): Image = Image(rows.map(_.mapPixels(f)))
+
+  // https://www.dfstudios.co.uk/articles/programming/image-programming-algorithms/image-processing-algorithms-part-5-contrast-adjustment/
+  def setContrast(desiredContrast: Int): Image = {
+    val contrastFactor: Double = (259.0 * (desiredContrast + 255.0)) / (255.0 * (259 - desiredContrast))
+
+    def updateColorValue(value: Int): Int = (contrastFactor * (value - 128)).toInt + 128
+
+    mapPixels(
+      _.mapRed(updateColorValue)
+        .mapGreen(updateColorValue)
+        .mapBlue(updateColorValue)
+    )
+  }
 }
 
 object Image {
-  case class ImageRow(pixels: Vector[ColoredPixel])
+  case class ImageRow(pixels: Vector[ColoredPixel]) {
+    def mapPixels(f: ColoredPixel => ColoredPixel): ImageRow = ImageRow(pixels.map(f))
+
+  }
 
   def fromBufferedImage(bufferedImage: BufferedImage): Image =
     Image(
